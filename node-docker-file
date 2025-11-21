@@ -1,0 +1,37 @@
+# -------------------------------
+# STAGE 1 — Build / Install
+# -------------------------------
+FROM node:18 AS builder
+
+# Create app folder
+WORKDIR /app
+
+# Copy package files first (better caching)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install --production=false
+
+# Copy all source code
+COPY . .
+
+# If you have a build step (React, TypeScript, etc.)
+# RUN npm run build
+
+
+# -------------------------------
+# STAGE 2 — Production Runtime
+# -------------------------------
+FROM node:18-slim
+
+WORKDIR /app
+
+# Only copy node_modules & built code (smaller image)
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app ./
+
+# Expose app port (change if needed)
+EXPOSE 3000
+
+# Start the Node.js application
+CMD ["node", "server.js"]
