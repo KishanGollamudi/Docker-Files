@@ -31,13 +31,13 @@ Your project is organized as:
 ```
 /
 ├── .net-docker-file/
-│   └── Dockerfile
+│   
 ├── java-docker-file/
-│   └── Dockerfile
+│   
 ├── node-docker-file/
-│   └── Dockerfile
+│   
 ├── python-docker-file/
-│   └── Dockerfile
+│   
 └── README.md
 ```
 
