@@ -1,0 +1,31 @@
+# --------------------------------------
+# STAGE 1 — Build .NET Application
+# --------------------------------------
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+WORKDIR /src
+
+# Copy csproj and restore
+COPY *.csproj .
+RUN dotnet restore
+
+# Copy everything and build
+COPY . .
+RUN dotnet publish -c Release -o /app/publish
+
+
+# --------------------------------------
+# STAGE 2 — Runtime Image
+# --------------------------------------
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+WORKDIR /app
+
+# Copy published output
+COPY --from=build /app/publish .
+
+# Expose port (change if needed)
+EXPOSE 8080
+
+# Start application
+ENTRYPOINT ["dotnet", "YourAppName.dll"]
